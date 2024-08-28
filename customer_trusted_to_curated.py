@@ -36,16 +36,19 @@ FROM (
         ROW_NUMBER() OVER (PARTITION BY c.serialnumber ORDER BY c.serialnumber) AS row_num
     FROM c
     JOIN s ON c.serialnumber = s.serialnumber
-    JOIN a ON a.timestamp = s.sensorreadingtime
+    JOIN a ON a.user = c.email
     WHERE c.sharewithresearchasofdate IS NOT NULL
 ) AS subquery
 WHERE row_num = 1;
 '''
 SQLQuery_node1724838789544 = sparkSqlQuery(glueContext, query = SqlQuery0, mapping = {"c":CustomersTrusted_node1724838751103, "s":StepData_node1724838800500, "a":AccelerometerTrusted_node1724838802730}, transformation_ctx = "SQLQuery_node1724838789544")
 
+# Script generated for node Drop Fields
+DropFields_node1724865137107 = DropFields.apply(frame=SQLQuery_node1724838789544, paths=["row_num"], transformation_ctx="DropFields_node1724865137107")
+
 # Script generated for node Amazon S3
 AmazonS3_node1724839376278 = glueContext.getSink(path="s3://jmbucketyroi/project/customer/curated/", connection_type="s3", updateBehavior="UPDATE_IN_DATABASE", partitionKeys=[], enableUpdateCatalog=True, transformation_ctx="AmazonS3_node1724839376278")
 AmazonS3_node1724839376278.setCatalogInfo(catalogDatabase="stedi_project",catalogTableName="customer_curated")
 AmazonS3_node1724839376278.setFormat("json")
-AmazonS3_node1724839376278.writeFrame(SQLQuery_node1724838789544)
+AmazonS3_node1724839376278.writeFrame(DropFields_node1724865137107)
 job.commit()
