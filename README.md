@@ -29,8 +29,8 @@ This project is part of the Udacity Data Engineering Nanodegree, focusing on bui
 ## Setup and Installation
 
 1. **Clone the repository:**
-   'git clone https://github.com/jmassey-17/Massey-Udacity-DataEngineeringWithAWS-SparkProject.git'
+   `git clone https://github.com/jmassey-17/Massey-Udacity-DataEngineeringWithAWS-SparkProject.git`
 2. **Configure AWS credentials:**
     Set up your AWS CLI and configure your credentials to access S3.
 3. **Run the data processing script:**
-   'python scripts/data_processing.py'
+   `python scripts/data_processing.py`
